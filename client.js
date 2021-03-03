@@ -53,35 +53,49 @@ function employeeReviews (array){
 
 // write a function that takes an employee object and returns a new object
 function callFunction(employee){
-  em1 = {name: '', bonusPercentage: '', totalCompensation: '', totalBonus: ''};
+  let em1 = {name: '', bonusPercentage: 0, totalCompensation: 0, totalBonus: 0};
+  em1.name = employee.name;
+  
   // if else assign bonus to employees based on rating
   if (employee.reviewRating <= 2){
     em1.totalBonus = 0;
   }
   else if (employee.reviewRating === 3){
     em1.totalBonus = employee.annualSalary * .04;
+    em1.bonusPercentage = .04;
   }
   else if (employee.reviewRating === 4){
     em1.totalBonus = employee.annualSalary * .06;
+    em1.bonusPercentage = .06;
   }
   else if (employee.reviewRating === 5){
     em1.totalBonus = employee.annualSalary * .1;
+    em1.bonusPercentage = .1;
   }
   // if employee has 4 digit employee number add 5% bonus
   if (employee.employeeNumber > 999 && employee.employeeNumber < 10000){
     em1.totalBonus += em1.totalBonus * .05;
+    em1.bonusPercentage += .05;
   }
   // if income is greater than $65k adjust bonus down 1%
   if(employee.annualSalary > 65000){
-    em1.totalBonus += em1.totalBonus * -.01;
+    em1.totalBonus += em1.totalBonus - employee.annualSalary * .01;
+    em1.bonusPercentage -= .01;
   }
   // no bonus can be above 13% or below 0%
   if (em1.totalBonus > employee.annualSalary * .13 ){
     em1.totalBonus = employee.annualSalary * .13;
+    em1.bonusPercentage = .13;
   }
+  if (em1.totalBonus < 0){
+    em1.totalBonus = 0;
+    em1.bonusPercentage = 0;
+  }
+  em1.totalCompensation = Number(employee.annualSalary) + em1.totalBonus;
+  return em1;
 }
 
-
+employeeReviews(employees);
 
 
 
