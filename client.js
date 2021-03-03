@@ -1,3 +1,4 @@
+$( document ).ready( readyNow );
 const employees = [
   {
     name: 'Atticus',
@@ -40,72 +41,81 @@ const employees = [
 // This is not a race. Everyone on your team should understand what is happening.
 // Ask questions when you don't.
 
-// call a function on each employee object that calculates bonus
-function employeeReviews (array){
-  //loop over employees array
-  for (let i = 0; i < array.length; i++) {
-    let bBonus = callFunction(array[i]);
-    // console.log each iteration
-    console.log(bBonus);
+ function rating (employee){
+    // loop through employee objects
+    for (let i = 0; i < employee.length; i++) {
+      let bBonus = callFunction(employee[i]);
+      console.log(bBonus);
   }
+
+    function callFunction(array){
+      let object = {name: '', bonusPercentage: 0, totalCompensation: 0, totalBonus: 0};
+      object.name = array.name;
+
+      if (array.reviewRating <= 2){
+        object.totalBonus = 0;
+      }
+      else if (array.reviewRating === 3){
+        object.totalBonus = array.annualSalary * .04;
+        object.bonusPercentage = .04;
+      }
+      else if (array.reviewRating === 4){
+        object.totalBonus = array.annualSalary * .06;
+        object.bonusPercentage = .06;
+      }
+      else if (array.reviewRating === 5){
+        object.totalBonus = array.annualSalary * .1;
+        object.bonusPercentage = .1;
+      }
+      // if employee has 4 digit employee number add 5% bonus
+      if (array.employeeNumber > 999 && array.employeeNumber < 10000){
+        object.totalBonus += array.annualSalary * .05;
+        object.bonusPercentage += .05;
+      }
+      // if income is greater than $65k adjust bonus down 1%
+      if (array.annualSalary > 65000){
+        object.totalBonus += object.totalBonus - array.annualSalary * .01;
+        object.bonusPercentage -= .01;
+      }
+      // no bonus can be above 13% or below 0%
+      if (object.totalBonus > array.annualSalary * .13){
+        object.totalBonus = array.annualSalary * .13;
+        object.bonusPercentage = .13;
+      } 
+      if ( object.totalBonus < 0){
+        object.totalBonus = 0;
+        object.bonusPercentage = 0;
+      }  
+      object.totalCompensation = Number(array.annualSalary) + object.totalBonus;
+      object.bonusPercentage = `${object.bonusPercentage}` * 100;
+      return object;
+    }
+  }
+  rating(employees);
+
+  console.log(employees);
+
+function displayBonus(){
+//Take input value
+
+//loop through objects
+//find match
+// take values of properties & and display them
+  console.log( 'in displayBonus' );
+  let person = $( '#employeeNameIn' ).val();
+  // target output by ID
+  let el = $( '#bonusPercentageOut' );
+  // empty
+  el.empty();
+  // loop through employees array
+  for (person of employees ){
+  el.append( `<h3>`+ `${person.bonusPercentage}`+ `</h3>`)
+  }
+};  
+
+function readyNow (){
+  console.log( 'JQ' );
+  $( '#addEmployeeButton' ).on( 'click', displayBonus );
+  let el = $( '#bonusPercentageOut' );
+  el.empty();
 }
-
-
-// write a function that takes an employee object and returns a new object
-function callFunction(employee){
-  let em1 = {name: '', bonusPercentage: 0, totalCompensation: 0, totalBonus: 0};
-  em1.name = employee.name;
-  
-  // if else assign bonus to employees based on rating
-  if (employee.reviewRating <= 2){
-    em1.totalBonus = 0;
-  }
-  else if (employee.reviewRating === 3){
-    em1.totalBonus = employee.annualSalary * .04;
-    em1.bonusPercentage = .04;
-  }
-  else if (employee.reviewRating === 4){
-    em1.totalBonus = employee.annualSalary * .06;
-    em1.bonusPercentage = .06;
-  }
-  else if (employee.reviewRating === 5){
-    em1.totalBonus = employee.annualSalary * .1;
-    em1.bonusPercentage = .1;
-  }
-  // if employee has 4 digit employee number add 5% bonus
-  if (employee.employeeNumber > 999 && employee.employeeNumber < 10000){
-    em1.totalBonus += em1.totalBonus * .05;
-    em1.bonusPercentage += .05;
-  }
-  // if income is greater than $65k adjust bonus down 1%
-  if(employee.annualSalary > 65000){
-    em1.totalBonus += em1.totalBonus - employee.annualSalary * .01;
-    em1.bonusPercentage -= .01;
-  }
-  // no bonus can be above 13% or below 0%
-  if (em1.totalBonus > employee.annualSalary * .13 ){
-    em1.totalBonus = employee.annualSalary * .13;
-    em1.bonusPercentage = .13;
-  }
-  if (em1.totalBonus < 0){
-    em1.totalBonus = 0;
-    em1.bonusPercentage = 0;
-  }
-  em1.totalCompensation = Number(employee.annualSalary) + em1.totalBonus;
-  return em1;
-}
-
-employeeReviews(employees);
-
-
-
-
-
-
-
-
-
-
-
-
-console.log( employees );
